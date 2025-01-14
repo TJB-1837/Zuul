@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=MyFrame
+comment0.text=\r\n\ MyFrame\ is\ a\ Class\ that\ creates\ a\ frame\ for\ the\ zuul\ game\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=
+comment1.target=MyFrame()
+comment1.text=\r\n\ prints\ the\ action\ of\ eatingConstructs\ a\ MyFrame\ Object\r\n
+numComments=2

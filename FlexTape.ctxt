@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=FlexTape
+comment0.text=\r\n\ FlexTape\ Class\ -\ Special\ item\ that\ can\ repair\ rooms\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pName\ pRepairPercent
+comment1.target=FlexTape(java.lang.String,\ int)
+comment1.text=\r\n\ Constructs\ a\ FlexTape\ Item\r\n\ \r\n\ @param\ pName\ the\ name\ of\ the\ item\r\n\ @param\ pRepairPercent\ the\ percentage\ of\ reparation\ the\ item\ is\ able\ to\ provide\r\n
+comment2.params=
+comment2.target=int\ getRepairPercent()
+comment2.text=\r\n\ Gets\ the\ percentage\ of\ reparability\ of\ the\ item\r\n\ \r\n\ @return\ the\ percentage\ of\ reparability\r\n
+numComments=3

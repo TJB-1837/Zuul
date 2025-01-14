@@ -1,0 +1,7 @@
+#BlueJ class context
+comment0.target=ConsumableItem
+comment0.text=\r\n\ ConsumableItem\ -\ a\ category\ of\ objects\ that\ can\ be\ eat\ /\ use\ on\ the\ player.\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pItemName\ pDes\ pPrice\ pWeight
+comment1.target=ConsumableItem(java.lang.String,\ java.lang.String,\ int,\ double)
+comment1.text=\r\n\ Constructs\ a\ ConsumableItem\r\n\ \r\n\ @param\ pItemName\ name\ of\ the\ item\r\n\ @param\ pDes\ Description\ of\ the\ item\r\n\ @param\ pPrice\ Price\ of\ the\ item\r\n\ @param\ pWeight\ Weight\ of\ the\ item\r\n
+numComments=2

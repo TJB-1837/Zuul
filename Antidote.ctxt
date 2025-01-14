@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=Antidote
+comment0.text=\r\nAntidote\ Class\ -\ Special\ item\ that\ can\ heal\ the\ player\ from\ a\ poison\ infection.\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pItemName
+comment1.target=Antidote(java.lang.String)
+comment1.text=\r\n\ Constructs\ an\ Antidote\ item\r\n\ \r\n\ @param\ pItemName\ Name\ of\ the\ Antidote\ item\r\n
+comment2.params=pPlayer
+comment2.target=void\ applyEffect(Player)
+comment2.text=\r\n\ Apply\ the\ effect\ of\ the\ player\r\n\ \r\n\ @param\ pPlayer\ The\ player\ you're\ applying\ the\ effect\r\n
+numComments=3

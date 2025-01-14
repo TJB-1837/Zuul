@@ -1,0 +1,723 @@
+<!DOCTYPE HTML>
+<html lang="fr">
+<head>
+<title>Source code</title>
+<link rel="stylesheet" type="text/css" href="../stylesheet.css" title="Style">
+</head>
+<body>
+<main role="main">
+<div class="sourceContainer">
+<pre><span class="sourceLineNo">001</span><a id="line.1">import java.io.FileReader;</a>
+<span class="sourceLineNo">002</span><a id="line.2">import java.io.BufferedReader;</a>
+<span class="sourceLineNo">003</span><a id="line.3">import java.util.Scanner;</a>
+<span class="sourceLineNo">004</span><a id="line.4">import java.io.FileWriter;</a>
+<span class="sourceLineNo">005</span><a id="line.5">import java.io.BufferedWriter;</a>
+<span class="sourceLineNo">006</span><a id="line.6">import java.io.PrintWriter;</a>
+<span class="sourceLineNo">007</span><a id="line.7">import java.io.FileNotFoundException;</a>
+<span class="sourceLineNo">008</span><a id="line.8"></a>
+<span class="sourceLineNo">009</span><a id="line.9"></a>
+<span class="sourceLineNo">010</span><a id="line.10">import java.util.HashMap;</a>
+<span class="sourceLineNo">011</span><a id="line.11">import java.util.ArrayList;</a>
+<span class="sourceLineNo">012</span><a id="line.12"></a>
+<span class="sourceLineNo">013</span><a id="line.13">/**</a>
+<span class="sourceLineNo">014</span><a id="line.14"> *  This class is part of the "World of Zuul" application. </a>
+<span class="sourceLineNo">015</span><a id="line.15"> *  "World of Zuul" is a very simple, text based adventure game.</a>
+<span class="sourceLineNo">016</span><a id="line.16"> * </a>
+<span class="sourceLineNo">017</span><a id="line.17"> *  This class creates all rooms, creates the parser and starts</a>
+<span class="sourceLineNo">018</span><a id="line.18"> *  the game.  It also evaluates and executes the commands that </a>
+<span class="sourceLineNo">019</span><a id="line.19"> *  the parser returns.</a>
+<span class="sourceLineNo">020</span><a id="line.20"> * </a>
+<span class="sourceLineNo">021</span><a id="line.21"> * @author Antoine MARMOL</a>
+<span class="sourceLineNo">022</span><a id="line.22"> * @version 11 / 21/05/2024</a>
+<span class="sourceLineNo">023</span><a id="line.23"> */</a>
+<span class="sourceLineNo">024</span><a id="line.24">public class GameEngine</a>
+<span class="sourceLineNo">025</span><a id="line.25">{</a>
+<span class="sourceLineNo">026</span><a id="line.26">    private Parser        aParser;</a>
+<span class="sourceLineNo">027</span><a id="line.27">    private UserInterface aGui;</a>
+<span class="sourceLineNo">028</span><a id="line.28">    private Player aPlayer;</a>
+<span class="sourceLineNo">029</span><a id="line.29">    //private HashMap&lt;String,Room&gt; aRooms;</a>
+<span class="sourceLineNo">030</span><a id="line.30">    private ArrayList&lt;Room&gt; aRooms;</a>
+<span class="sourceLineNo">031</span><a id="line.31">    private boolean aTestMode;</a>
+<span class="sourceLineNo">032</span><a id="line.32">    </a>
+<span class="sourceLineNo">033</span><a id="line.33">    /**</a>
+<span class="sourceLineNo">034</span><a id="line.34">     * Constructor for objects of class GameEngine</a>
+<span class="sourceLineNo">035</span><a id="line.35">     */</a>
+<span class="sourceLineNo">036</span><a id="line.36">    public GameEngine()</a>
+<span class="sourceLineNo">037</span><a id="line.37">    {</a>
+<span class="sourceLineNo">038</span><a id="line.38">        this.aParser = new Parser();</a>
+<span class="sourceLineNo">039</span><a id="line.39">        this.aPlayer = new Player("Chuck");</a>
+<span class="sourceLineNo">040</span><a id="line.40">        this.aTestMode = false;</a>
+<span class="sourceLineNo">041</span><a id="line.41">        //this.aRooms  = new HashMap&lt;String,Room&gt;();</a>
+<span class="sourceLineNo">042</span><a id="line.42">        this.aRooms  = new ArrayList&lt;Room&gt;();</a>
+<span class="sourceLineNo">043</span><a id="line.43">        this.createRooms();</a>
+<span class="sourceLineNo">044</span><a id="line.44">        </a>
+<span class="sourceLineNo">045</span><a id="line.45">    }</a>
+<span class="sourceLineNo">046</span><a id="line.46"></a>
+<span class="sourceLineNo">047</span><a id="line.47">    /**</a>
+<span class="sourceLineNo">048</span><a id="line.48">     * Sets the user interface for the game engine.</a>
+<span class="sourceLineNo">049</span><a id="line.49">     * </a>
+<span class="sourceLineNo">050</span><a id="line.50">     * @param pUserInterface The user interface object to be set.</a>
+<span class="sourceLineNo">051</span><a id="line.51">     */</a>
+<span class="sourceLineNo">052</span><a id="line.52">    public void setGUI( final UserInterface pUserInterface )</a>
+<span class="sourceLineNo">053</span><a id="line.53">    {</a>
+<span class="sourceLineNo">054</span><a id="line.54">        this.aGui = pUserInterface;</a>
+<span class="sourceLineNo">055</span><a id="line.55">        this.printWelcome();</a>
+<span class="sourceLineNo">056</span><a id="line.56">    }</a>
+<span class="sourceLineNo">057</span><a id="line.57"></a>
+<span class="sourceLineNo">058</span><a id="line.58">    /**</a>
+<span class="sourceLineNo">059</span><a id="line.59">     * Print out the opening message for the player.</a>
+<span class="sourceLineNo">060</span><a id="line.60">     */</a>
+<span class="sourceLineNo">061</span><a id="line.61">    private void printWelcome()</a>
+<span class="sourceLineNo">062</span><a id="line.62">    {</a>
+<span class="sourceLineNo">063</span><a id="line.63">        this.aGui.print( "\n" );</a>
+<span class="sourceLineNo">064</span><a id="line.64">        this.aGui.println( "Welcome to Zuul Combat Evolved!" );</a>
+<span class="sourceLineNo">065</span><a id="line.65">        this.aGui.println( "Your objective is to repair the space station." );</a>
+<span class="sourceLineNo">066</span><a id="line.66">        this.aGui.println( "First Objective: find FlexTape and FlexSeal." );</a>
+<span class="sourceLineNo">067</span><a id="line.67">        this.aGui.println( "Type 'help' if you need help." );</a>
+<span class="sourceLineNo">068</span><a id="line.68">        this.aGui.print( "\n" );</a>
+<span class="sourceLineNo">069</span><a id="line.69">        printLocaInfo();</a>
+<span class="sourceLineNo">070</span><a id="line.70">    }</a>
+<span class="sourceLineNo">071</span><a id="line.71">    </a>
+<span class="sourceLineNo">072</span><a id="line.72"></a>
+<span class="sourceLineNo">073</span><a id="line.73">    /**</a>
+<span class="sourceLineNo">074</span><a id="line.74">     * Create all the rooms and link their exits together.</a>
+<span class="sourceLineNo">075</span><a id="line.75">     * Create all items and put them in the rooms</a>
+<span class="sourceLineNo">076</span><a id="line.76">     */</a>
+<span class="sourceLineNo">077</span><a id="line.77">    private void createRooms()</a>
+<span class="sourceLineNo">078</span><a id="line.78">    {</a>
+<span class="sourceLineNo">079</span><a id="line.79">        // Déclaration / création des salles </a>
+<span class="sourceLineNo">080</span><a id="line.80">        </a>
+<span class="sourceLineNo">081</span><a id="line.81">        //Pole tech</a>
+<span class="sourceLineNo">082</span><a id="line.82">        Room vVaisseau              = new Room("Ship","in the ship you arrived with","Vaisseau.png");</a>
+<span class="sourceLineNo">083</span><a id="line.83">        Room vHangar                = new Room("Hangar","in the hangar","Hangar.png");</a>
+<span class="sourceLineNo">084</span><a id="line.84">        RepairableRoom vSalleDesMachines      = new RepairableRoom("Engines room","in the engines room","SalleDesMachinesBroken.jpg","SalleDesMachinesRepaired.jpg");</a>
+<span class="sourceLineNo">085</span><a id="line.85">        Room vSalleDeMaintenance    = new Room("Maintenance bay","in a maintenance bay","SalleDeMaintenance.jpg");</a>
+<span class="sourceLineNo">086</span><a id="line.86">        Room vEntrepot              = new Room("Warehouse","in a warehouse","Entrepot.jpg");</a>
+<span class="sourceLineNo">087</span><a id="line.87">        Room vMetroTech             = new Room("Metro station, technical division","in the metro station of the technical department","MetroTech.png");</a>
+<span class="sourceLineNo">088</span><a id="line.88">        Room vArmurerie             = new Room("Armory","in the armory.","Armory.png");</a>
+<span class="sourceLineNo">089</span><a id="line.89">        </a>
+<span class="sourceLineNo">090</span><a id="line.90">        //Pole med</a>
+<span class="sourceLineNo">091</span><a id="line.91">        Room vMetroMedic            = new Room("Metro station, medical departement","in the metro station of the medical bay","MetroMedic.png");</a>
+<span class="sourceLineNo">092</span><a id="line.92">        Room vHallHopital           = new Room("Hospital reception","in the hospital reception.","Hopital.jpg");</a>
+<span class="sourceLineNo">093</span><a id="line.93">        Room vChambre13             = new Room("Chamber 13","in the chamber number 13 of the hospital.","Chambre13.png");</a>
+<span class="sourceLineNo">094</span><a id="line.94">        Room vChambre14             = new Room("Chamber 14","in the chamber number 14 of the hospital.","Chambre14.png");</a>
+<span class="sourceLineNo">095</span><a id="line.95">        Room vBaieEvac              = new Room("Evac bay","in the evac bay","BaieEvac.png");</a>
+<span class="sourceLineNo">096</span><a id="line.96">        Room vLab                   = new Room("Laboratory","in the lab.","Labo.png");</a>
+<span class="sourceLineNo">097</span><a id="line.97">        Room vObservatoire           = new Room("Observatory","in the observatory.","Observatoire.png");</a>
+<span class="sourceLineNo">098</span><a id="line.98">        TransporterRoom vNavette    = new TransporterRoom("Escape pod","in a strange escape pod","Navette.jpg");</a>
+<span class="sourceLineNo">099</span><a id="line.99">        </a>
+<span class="sourceLineNo">100</span><a id="line.100">        //Pole res</a>
+<span class="sourceLineNo">101</span><a id="line.101">        Room vMetroRes              = new Room("Metro station, resitential area","in the metro station of the residential area","MetroRes.png");</a>
+<span class="sourceLineNo">102</span><a id="line.102">        Room vPrison                = new Room("Prison", "in the jail","Prison.png");</a>
+<span class="sourceLineNo">103</span><a id="line.103">        Room vHall                  = new Room("Hall","in the hall","Hall.png");</a>
+<span class="sourceLineNo">104</span><a id="line.104">        Room vAdmin                 = new Room("Admin","in the admin","Admin.jpg");</a>
+<span class="sourceLineNo">105</span><a id="line.105">        Room vCentreSecu            = new Room("Security center","in the security center","CentreSecu.jpg");</a>
+<span class="sourceLineNo">106</span><a id="line.106">        Room vMarchand              = new Room("Srcapp","in the Scrapp store.\n Where you can buy and sell all you want.","Marchand.png");</a>
+<span class="sourceLineNo">107</span><a id="line.107">        Room vZoneR1                = new Room("Residential area 1","in a residential area.\n Seems like it's dead.","ZR1.jpg");</a>
+<span class="sourceLineNo">108</span><a id="line.108">        Room vA117                  = new Room("Appartment 117","in the appartment number 117","A117.png");</a>
+<span class="sourceLineNo">109</span><a id="line.109">        Room vA052                  = new Room("Appartment 052","in the appartment number 052","A052.png");</a>
+<span class="sourceLineNo">110</span><a id="line.110">        Room vA010                  = new Room("Appartment 010","in the appartment number 010","A010.png");</a>
+<span class="sourceLineNo">111</span><a id="line.111">        Room vZoneR2                = new Room("Residential area 2","in a residential area.\n Seems like people are pretty rich there.","ZR2.jpg");</a>
+<span class="sourceLineNo">112</span><a id="line.112">        Room vA239                  = new Room("Appartment 239","in the appartment number 239","A239.png");</a>
+<span class="sourceLineNo">113</span><a id="line.113">        Room vA312                  = new Room("Appartment 312","in the appartment number 312","A312.png");</a>
+<span class="sourceLineNo">114</span><a id="line.114">        Room vA141                  = new Room("Appartment 141","in the appartment number 141","A141.png");</a>
+<span class="sourceLineNo">115</span><a id="line.115">        Room vA1837                 = new Room("Appartment 1837","in the appartment number 1837","A1837.jpg");</a>
+<span class="sourceLineNo">116</span><a id="line.116">        Room vBar                   = new Room("Bar","in the bar","Bar.jpg");</a>
+<span class="sourceLineNo">117</span><a id="line.117">        </a>
+<span class="sourceLineNo">118</span><a id="line.118">        // Doors</a>
+<span class="sourceLineNo">119</span><a id="line.119">        vEntrepot.setDoor(vSalleDesMachines, new Door (vSalleDesMachines,new Item("BlueKey","Can open the engines room door.",0,0.0)));    </a>
+<span class="sourceLineNo">120</span><a id="line.120">        </a>
+<span class="sourceLineNo">121</span><a id="line.121">        // aRooms</a>
+<span class="sourceLineNo">122</span><a id="line.122">        this.aRooms.add(vVaisseau);</a>
+<span class="sourceLineNo">123</span><a id="line.123">        this.aRooms.add(vHangar );</a>
+<span class="sourceLineNo">124</span><a id="line.124">        this.aRooms.add(vSalleDesMachines );</a>
+<span class="sourceLineNo">125</span><a id="line.125">        this.aRooms.add(vSalleDeMaintenance);</a>
+<span class="sourceLineNo">126</span><a id="line.126">        this.aRooms.add(vEntrepot);</a>
+<span class="sourceLineNo">127</span><a id="line.127">        this.aRooms.add(vMetroTech);</a>
+<span class="sourceLineNo">128</span><a id="line.128">        this.aRooms.add(vArmurerie);</a>
+<span class="sourceLineNo">129</span><a id="line.129">        </a>
+<span class="sourceLineNo">130</span><a id="line.130">        this.aRooms.add(vMetroMedic);</a>
+<span class="sourceLineNo">131</span><a id="line.131">        this.aRooms.add(vHallHopital);</a>
+<span class="sourceLineNo">132</span><a id="line.132">        this.aRooms.add(vChambre13);</a>
+<span class="sourceLineNo">133</span><a id="line.133">        this.aRooms.add(vChambre14);</a>
+<span class="sourceLineNo">134</span><a id="line.134">        this.aRooms.add(vBaieEvac);</a>
+<span class="sourceLineNo">135</span><a id="line.135">        this.aRooms.add(vLab);</a>
+<span class="sourceLineNo">136</span><a id="line.136">        this.aRooms.add(vObservatoire);</a>
+<span class="sourceLineNo">137</span><a id="line.137">        this.aRooms.add(vNavette);</a>
+<span class="sourceLineNo">138</span><a id="line.138">        </a>
+<span class="sourceLineNo">139</span><a id="line.139">        this.aRooms.add(vMetroRes);</a>
+<span class="sourceLineNo">140</span><a id="line.140">        this.aRooms.add(vPrison);</a>
+<span class="sourceLineNo">141</span><a id="line.141">        this.aRooms.add(vHall);</a>
+<span class="sourceLineNo">142</span><a id="line.142">        this.aRooms.add(vAdmin);</a>
+<span class="sourceLineNo">143</span><a id="line.143">        this.aRooms.add(vCentreSecu);</a>
+<span class="sourceLineNo">144</span><a id="line.144">        this.aRooms.add(vMarchand);</a>
+<span class="sourceLineNo">145</span><a id="line.145">        this.aRooms.add(vZoneR1);</a>
+<span class="sourceLineNo">146</span><a id="line.146">        this.aRooms.add(vA117);</a>
+<span class="sourceLineNo">147</span><a id="line.147">        this.aRooms.add(vA052);</a>
+<span class="sourceLineNo">148</span><a id="line.148">        this.aRooms.add(vA010);</a>
+<span class="sourceLineNo">149</span><a id="line.149">        this.aRooms.add(vZoneR2);</a>
+<span class="sourceLineNo">150</span><a id="line.150">        this.aRooms.add(vA239);</a>
+<span class="sourceLineNo">151</span><a id="line.151">        this.aRooms.add(vA312);</a>
+<span class="sourceLineNo">152</span><a id="line.152">        this.aRooms.add(vA141);</a>
+<span class="sourceLineNo">153</span><a id="line.153">        this.aRooms.add(vA1837);</a>
+<span class="sourceLineNo">154</span><a id="line.154">        this.aRooms.add(vBar);</a>
+<span class="sourceLineNo">155</span><a id="line.155">        </a>
+<span class="sourceLineNo">156</span><a id="line.156">        </a>
+<span class="sourceLineNo">157</span><a id="line.157">        </a>
+<span class="sourceLineNo">158</span><a id="line.158">        // Entrées / Sorties</a>
+<span class="sourceLineNo">159</span><a id="line.159">        //Pole tech ---------------------------------------------------------------</a>
+<span class="sourceLineNo">160</span><a id="line.160">        //Sorties vVaisseau</a>
+<span class="sourceLineNo">161</span><a id="line.161">        vVaisseau.setExits("south",vHangar);</a>
+<span class="sourceLineNo">162</span><a id="line.162">        </a>
+<span class="sourceLineNo">163</span><a id="line.163">        //Sorties vHangar</a>
+<span class="sourceLineNo">164</span><a id="line.164">        vHangar.setExits("north",vVaisseau);</a>
+<span class="sourceLineNo">165</span><a id="line.165">        vHangar.setExits("west",vEntrepot);</a>
+<span class="sourceLineNo">166</span><a id="line.166">        vHangar.setExits("down",vMetroTech);</a>
+<span class="sourceLineNo">167</span><a id="line.167">        </a>
+<span class="sourceLineNo">168</span><a id="line.168">        //Sorties vSalleDesMachines</a>
+<span class="sourceLineNo">169</span><a id="line.169">        vSalleDesMachines.setExits("west",vHangar);</a>
+<span class="sourceLineNo">170</span><a id="line.170">        vSalleDesMachines.setExits("south",vEntrepot);</a>
+<span class="sourceLineNo">171</span><a id="line.171">        </a>
+<span class="sourceLineNo">172</span><a id="line.172">        //Sorties vSalleDeMaintenance</a>
+<span class="sourceLineNo">173</span><a id="line.173">        vSalleDeMaintenance.setExits("down",vEntrepot);</a>
+<span class="sourceLineNo">174</span><a id="line.174">        vSalleDeMaintenance.setExits("east",vMetroTech);</a>
+<span class="sourceLineNo">175</span><a id="line.175">        </a>
+<span class="sourceLineNo">176</span><a id="line.176">        //Sorties vEntrepot</a>
+<span class="sourceLineNo">177</span><a id="line.177">        vEntrepot.setExits("east",vHangar);</a>
+<span class="sourceLineNo">178</span><a id="line.178">        vEntrepot.setExits("up",vSalleDeMaintenance);</a>
+<span class="sourceLineNo">179</span><a id="line.179">        vEntrepot.setExits("north",vSalleDesMachines);</a>
+<span class="sourceLineNo">180</span><a id="line.180">        </a>
+<span class="sourceLineNo">181</span><a id="line.181">        //Sorties vMetroTech</a>
+<span class="sourceLineNo">182</span><a id="line.182">        vMetroTech.setExits("up",vHangar); </a>
+<span class="sourceLineNo">183</span><a id="line.183">        vMetroTech.setExits("south",vArmurerie);</a>
+<span class="sourceLineNo">184</span><a id="line.184">        vMetroTech.setExits("west",vMetroMedic);</a>
+<span class="sourceLineNo">185</span><a id="line.185">        vMetroTech.setExits("east",vMetroRes);</a>
+<span class="sourceLineNo">186</span><a id="line.186">        </a>
+<span class="sourceLineNo">187</span><a id="line.187">        //Sorties vArmurerie</a>
+<span class="sourceLineNo">188</span><a id="line.188">        vArmurerie.setExits("north",vMetroTech);</a>
+<span class="sourceLineNo">189</span><a id="line.189">        </a>
+<span class="sourceLineNo">190</span><a id="line.190">        //Pole Med ---------------------------------------------------------------</a>
+<span class="sourceLineNo">191</span><a id="line.191">        //Sorties vMetroMedic</a>
+<span class="sourceLineNo">192</span><a id="line.192">        vMetroMedic.setExits("east",vMetroTech);</a>
+<span class="sourceLineNo">193</span><a id="line.193">        vMetroMedic.setExits("up",vHallHopital);</a>
+<span class="sourceLineNo">194</span><a id="line.194">        vMetroMedic.setExits("south",vObservatoire);</a>
+<span class="sourceLineNo">195</span><a id="line.195">        vMetroMedic.setExits("west",vMetroRes);</a>
+<span class="sourceLineNo">196</span><a id="line.196">        </a>
+<span class="sourceLineNo">197</span><a id="line.197">        //Sorties vObservatoire</a>
+<span class="sourceLineNo">198</span><a id="line.198">        vObservatoire.setExits("north",vMetroMedic);</a>
+<span class="sourceLineNo">199</span><a id="line.199">        vObservatoire.setExits("up",vLab);</a>
+<span class="sourceLineNo">200</span><a id="line.200">        </a>
+<span class="sourceLineNo">201</span><a id="line.201">        //Sortie vLab</a>
+<span class="sourceLineNo">202</span><a id="line.202">        vLab.setExits("west",vHallHopital);</a>
+<span class="sourceLineNo">203</span><a id="line.203">        vLab.setExits("down",vObservatoire);</a>
+<span class="sourceLineNo">204</span><a id="line.204">        </a>
+<span class="sourceLineNo">205</span><a id="line.205">        //Sortie vHallHopital</a>
+<span class="sourceLineNo">206</span><a id="line.206">        vHallHopital.setExits("down",vMetroMedic);</a>
+<span class="sourceLineNo">207</span><a id="line.207">        vHallHopital.setExits("east",vLab);</a>
+<span class="sourceLineNo">208</span><a id="line.208">        vHallHopital.setExits("north",vBaieEvac);</a>
+<span class="sourceLineNo">209</span><a id="line.209">        vHallHopital.setExits("south",vChambre13);</a>
+<span class="sourceLineNo">210</span><a id="line.210">        vHallHopital.setExits("west",vChambre14);</a>
+<span class="sourceLineNo">211</span><a id="line.211">        </a>
+<span class="sourceLineNo">212</span><a id="line.212">        //Sortie Chambre13</a>
+<span class="sourceLineNo">213</span><a id="line.213">        vChambre13.setExits("north",vHallHopital);</a>
+<span class="sourceLineNo">214</span><a id="line.214">        </a>
+<span class="sourceLineNo">215</span><a id="line.215">        //Sortie Chambre14</a>
+<span class="sourceLineNo">216</span><a id="line.216">        vChambre14.setExits("east",vHallHopital);</a>
+<span class="sourceLineNo">217</span><a id="line.217">        </a>
+<span class="sourceLineNo">218</span><a id="line.218">        //Sortie vBaieEvac</a>
+<span class="sourceLineNo">219</span><a id="line.219">        vBaieEvac.setExits("south",vHallHopital);</a>
+<span class="sourceLineNo">220</span><a id="line.220">        vBaieEvac.setExits("north",vNavette);</a>
+<span class="sourceLineNo">221</span><a id="line.221">        </a>
+<span class="sourceLineNo">222</span><a id="line.222">        //Sorties vNavette</a>
+<span class="sourceLineNo">223</span><a id="line.223">        vNavette.setExits("south",vBaieEvac);</a>
+<span class="sourceLineNo">224</span><a id="line.224">        </a>
+<span class="sourceLineNo">225</span><a id="line.225">        //Pole Res ---------------------------------------------------------------</a>
+<span class="sourceLineNo">226</span><a id="line.226">        //Sortie vMetroRes</a>
+<span class="sourceLineNo">227</span><a id="line.227">        vMetroRes.setExits("west",vMetroTech);</a>
+<span class="sourceLineNo">228</span><a id="line.228">        vMetroRes.setExits("east",vMetroMedic);</a>
+<span class="sourceLineNo">229</span><a id="line.229">        vMetroRes.setExits("up",vHall);</a>
+<span class="sourceLineNo">230</span><a id="line.230">        vMetroRes.setExits("south",vPrison);</a>
+<span class="sourceLineNo">231</span><a id="line.231">        </a>
+<span class="sourceLineNo">232</span><a id="line.232">        //Sortie vPrison</a>
+<span class="sourceLineNo">233</span><a id="line.233">        vPrison.setExits("north",vMetroRes);</a>
+<span class="sourceLineNo">234</span><a id="line.234">        </a>
+<span class="sourceLineNo">235</span><a id="line.235">        //Sortie vHall</a>
+<span class="sourceLineNo">236</span><a id="line.236">        vHall.setExits("down",vMetroRes);</a>
+<span class="sourceLineNo">237</span><a id="line.237">        vHall.setExits("up",vAdmin);</a>
+<span class="sourceLineNo">238</span><a id="line.238">        vHall.setExits("west",vMarchand);</a>
+<span class="sourceLineNo">239</span><a id="line.239">        vHall.setExits("north",vZoneR1);</a>
+<span class="sourceLineNo">240</span><a id="line.240">        vHall.setExits("south",vZoneR2);</a>
+<span class="sourceLineNo">241</span><a id="line.241">        </a>
+<span class="sourceLineNo">242</span><a id="line.242">        //Sortie vMarchand</a>
+<span class="sourceLineNo">243</span><a id="line.243">        vMarchand.setExits("east",vHall);</a>
+<span class="sourceLineNo">244</span><a id="line.244">        </a>
+<span class="sourceLineNo">245</span><a id="line.245">        //Sortie vAdmin</a>
+<span class="sourceLineNo">246</span><a id="line.246">        vAdmin.setExits("down",vHall);</a>
+<span class="sourceLineNo">247</span><a id="line.247">        vAdmin.setExits("east",vCentreSecu);</a>
+<span class="sourceLineNo">248</span><a id="line.248">        </a>
+<span class="sourceLineNo">249</span><a id="line.249">        //Sortie vCentreSecu</a>
+<span class="sourceLineNo">250</span><a id="line.250">        vCentreSecu.setExits("west",vAdmin);</a>
+<span class="sourceLineNo">251</span><a id="line.251">        </a>
+<span class="sourceLineNo">252</span><a id="line.252">        //Sortie vZoneR1</a>
+<span class="sourceLineNo">253</span><a id="line.253">        vZoneR1.setExits("up",vA117);</a>
+<span class="sourceLineNo">254</span><a id="line.254">        vZoneR1.setExits("north",vA052);</a>
+<span class="sourceLineNo">255</span><a id="line.255">        vZoneR1.setExits("west",vA010);</a>
+<span class="sourceLineNo">256</span><a id="line.256">        vZoneR1.setExits("east",vBar);</a>
+<span class="sourceLineNo">257</span><a id="line.257">        vZoneR1.setExits("south",vHall);</a>
+<span class="sourceLineNo">258</span><a id="line.258">        </a>
+<span class="sourceLineNo">259</span><a id="line.259">        //Sortie vA117</a>
+<span class="sourceLineNo">260</span><a id="line.260">        vA117.setExits("down",vZoneR1);</a>
+<span class="sourceLineNo">261</span><a id="line.261">        </a>
+<span class="sourceLineNo">262</span><a id="line.262">        //Sortie vA052</a>
+<span class="sourceLineNo">263</span><a id="line.263">        vA052.setExits("south",vZoneR1);</a>
+<span class="sourceLineNo">264</span><a id="line.264">        </a>
+<span class="sourceLineNo">265</span><a id="line.265">        //Sortie vA010</a>
+<span class="sourceLineNo">266</span><a id="line.266">        vA010.setExits("east",vZoneR1);</a>
+<span class="sourceLineNo">267</span><a id="line.267">        </a>
+<span class="sourceLineNo">268</span><a id="line.268">        //Sortie vZoneR2</a>
+<span class="sourceLineNo">269</span><a id="line.269">        vZoneR2.setExits("north",vHall);</a>
+<span class="sourceLineNo">270</span><a id="line.270">        vZoneR2.setExits("down",vA1837);</a>
+<span class="sourceLineNo">271</span><a id="line.271">        vZoneR2.setExits("up",vA312);</a>
+<span class="sourceLineNo">272</span><a id="line.272">        vZoneR2.setExits("east",vA239);</a>
+<span class="sourceLineNo">273</span><a id="line.273">        vZoneR2.setExits("west",vBar);</a>
+<span class="sourceLineNo">274</span><a id="line.274">        vZoneR2.setExits("south",vA141);</a>
+<span class="sourceLineNo">275</span><a id="line.275">        </a>
+<span class="sourceLineNo">276</span><a id="line.276">        //Sortie vA141</a>
+<span class="sourceLineNo">277</span><a id="line.277">        vA141.setExits("north",vZoneR2);</a>
+<span class="sourceLineNo">278</span><a id="line.278">        </a>
+<span class="sourceLineNo">279</span><a id="line.279">        //Sortie vA239</a>
+<span class="sourceLineNo">280</span><a id="line.280">        vA239.setExits("west",vZoneR2);</a>
+<span class="sourceLineNo">281</span><a id="line.281">        </a>
+<span class="sourceLineNo">282</span><a id="line.282">        //Sortie vA312</a>
+<span class="sourceLineNo">283</span><a id="line.283">        vA312.setExits("down",vZoneR2);</a>
+<span class="sourceLineNo">284</span><a id="line.284">        </a>
+<span class="sourceLineNo">285</span><a id="line.285">        //Sortie vA1837</a>
+<span class="sourceLineNo">286</span><a id="line.286">        vA1837.setExits("up",vZoneR2);</a>
+<span class="sourceLineNo">287</span><a id="line.287">        </a>
+<span class="sourceLineNo">288</span><a id="line.288">        //Sortie vBar</a>
+<span class="sourceLineNo">289</span><a id="line.289">        vBar.setExits("west",vZoneR1);</a>
+<span class="sourceLineNo">290</span><a id="line.290">        vBar.setExits("east",vZoneR2);</a>
+<span class="sourceLineNo">291</span><a id="line.291">        </a>
+<span class="sourceLineNo">292</span><a id="line.292">        //--------------------------------------------------------</a>
+<span class="sourceLineNo">293</span><a id="line.293">        </a>
+<span class="sourceLineNo">294</span><a id="line.294">        // Doors</a>
+<span class="sourceLineNo">295</span><a id="line.295">        //Door vDoorSDM = new Door (vSalleDesMachines, new Item("BlueKey","Can open the engines room door.",0,0.0));        </a>
+<span class="sourceLineNo">296</span><a id="line.296">        </a>
+<span class="sourceLineNo">297</span><a id="line.297">        </a>
+<span class="sourceLineNo">298</span><a id="line.298">        //Début du jeu</a>
+<span class="sourceLineNo">299</span><a id="line.299">        this.aPlayer.setCurrentRoom(vVaisseau);</a>
+<span class="sourceLineNo">300</span><a id="line.300">        </a>
+<span class="sourceLineNo">301</span><a id="line.301">        </a>
+<span class="sourceLineNo">302</span><a id="line.302">        </a>
+<span class="sourceLineNo">303</span><a id="line.303">        // Items   </a>
+<span class="sourceLineNo">304</span><a id="line.304">        vHangar.getItemList().addItem( new Item("Flashlight","Lumos Maxima",15,0.5) ); //# 1</a>
+<span class="sourceLineNo">305</span><a id="line.305">        vSalleDeMaintenance.getItemList().addItem( new Item("Shovel","Useful for burying people or monsters",30,3.0) );</a>
+<span class="sourceLineNo">306</span><a id="line.306">        vSalleDeMaintenance.getItemList().addItem( new Item("Spanner","Could be usefull to enter locked vents",25,1.0) );</a>
+<span class="sourceLineNo">307</span><a id="line.307">        vEntrepot.getItemList().addItem( new Item("GoldBar","It must be worth a lot ",150,35.0) ); //# 3</a>
+<span class="sourceLineNo">308</span><a id="line.308">        vLab.getItemList().addItem( new MagicCookie("MagicCookie",3) ); //# 2</a>
+<span class="sourceLineNo">309</span><a id="line.309">        vAdmin.getItemList().addItem( new Beamer("Beamer") ); //# 4</a>
+<span class="sourceLineNo">310</span><a id="line.310">        vPrison.getItemList().addItem( new Poison("Poison",15) ); //# 5</a>
+<span class="sourceLineNo">311</span><a id="line.311">        vChambre13.getItemList().addItem( new Antidote("Antidote") ); //# 6</a>
+<span class="sourceLineNo">312</span><a id="line.312">        vMarchand.getItemList().addItem( new FlexTape("FlexSeal",50) );</a>
+<span class="sourceLineNo">313</span><a id="line.313">        vBar.getItemList().addItem( new FlexTape("FlexTape",50) );</a>
+<span class="sourceLineNo">314</span><a id="line.314">        vBar.getItemList().addItem( new Item("Beer","Great beer",20,2.0 ) );</a>
+<span class="sourceLineNo">315</span><a id="line.315">        vChambre14.getItemList().addItem( new Item("BlueKey","Can open the engines room",0,0.0) );</a>
+<span class="sourceLineNo">316</span><a id="line.316">        vA312.getItemList().addItem( new Item("BlueKey","Can open the engines room",0,0.0) );</a>
+<span class="sourceLineNo">317</span><a id="line.317">    }//createRooms()</a>
+<span class="sourceLineNo">318</span><a id="line.318">    </a>
+<span class="sourceLineNo">319</span><a id="line.319">    /**</a>
+<span class="sourceLineNo">320</span><a id="line.320">     * Given a command, process (that is: execute) the command.</a>
+<span class="sourceLineNo">321</span><a id="line.321">     * If this command ends the game, true is returned, otherwise false is</a>
+<span class="sourceLineNo">322</span><a id="line.322">     * returned.</a>
+<span class="sourceLineNo">323</span><a id="line.323">     * </a>
+<span class="sourceLineNo">324</span><a id="line.324">     * @param pCommandLine The command entered by the user.</a>
+<span class="sourceLineNo">325</span><a id="line.325">     */</a>
+<span class="sourceLineNo">326</span><a id="line.326">    public void interpretCommand( final String pCommandLine ) </a>
+<span class="sourceLineNo">327</span><a id="line.327">    {</a>
+<span class="sourceLineNo">328</span><a id="line.328">        this.aGui.println( "&gt; " + pCommandLine );</a>
+<span class="sourceLineNo">329</span><a id="line.329">        Command vCommand = this.aParser.getCommand( pCommandLine );</a>
+<span class="sourceLineNo">330</span><a id="line.330"></a>
+<span class="sourceLineNo">331</span><a id="line.331">        if ( vCommand.isUnknown() ) {</a>
+<span class="sourceLineNo">332</span><a id="line.332">            this.aGui.println( "I don't know what you mean..." );</a>
+<span class="sourceLineNo">333</span><a id="line.333">            return;</a>
+<span class="sourceLineNo">334</span><a id="line.334">        }</a>
+<span class="sourceLineNo">335</span><a id="line.335">        </a>
+<span class="sourceLineNo">336</span><a id="line.336">        CommandWord vCommandWord = vCommand.getCommandWord();</a>
+<span class="sourceLineNo">337</span><a id="line.337">        switch(vCommandWord){</a>
+<span class="sourceLineNo">338</span><a id="line.338">            case GO: this.goRoom(vCommand);</a>
+<span class="sourceLineNo">339</span><a id="line.339">                break;</a>
+<span class="sourceLineNo">340</span><a id="line.340">            case HELP: this.printHelp();</a>
+<span class="sourceLineNo">341</span><a id="line.341">                break;</a>
+<span class="sourceLineNo">342</span><a id="line.342">            case LOOK: this.look(vCommand);</a>
+<span class="sourceLineNo">343</span><a id="line.343">                break;</a>
+<span class="sourceLineNo">344</span><a id="line.344">            case EAT:  this.eat(vCommand);</a>
+<span class="sourceLineNo">345</span><a id="line.345">                break;</a>
+<span class="sourceLineNo">346</span><a id="line.346">            case BACK: this.back();</a>
+<span class="sourceLineNo">347</span><a id="line.347">                break;</a>
+<span class="sourceLineNo">348</span><a id="line.348">            case INVENTORY: this.inventory();</a>
+<span class="sourceLineNo">349</span><a id="line.349">                break;</a>
+<span class="sourceLineNo">350</span><a id="line.350">            case TEST: this.test(vCommand);</a>
+<span class="sourceLineNo">351</span><a id="line.351">                break;</a>
+<span class="sourceLineNo">352</span><a id="line.352">            case TAKE: this.take(vCommand);</a>
+<span class="sourceLineNo">353</span><a id="line.353">                break;</a>
+<span class="sourceLineNo">354</span><a id="line.354">            case DROP: this.drop(vCommand);</a>
+<span class="sourceLineNo">355</span><a id="line.355">                break;</a>
+<span class="sourceLineNo">356</span><a id="line.356">            case FIRE: this.fire(vCommand);</a>
+<span class="sourceLineNo">357</span><a id="line.357">                break;</a>
+<span class="sourceLineNo">358</span><a id="line.358">            case CHARGE: this.charge(vCommand);</a>
+<span class="sourceLineNo">359</span><a id="line.359">                break;</a>
+<span class="sourceLineNo">360</span><a id="line.360">            case ALEA: this.alea(vCommand);</a>
+<span class="sourceLineNo">361</span><a id="line.361">                break;</a>
+<span class="sourceLineNo">362</span><a id="line.362">            case USE:  this.use(vCommand);</a>
+<span class="sourceLineNo">363</span><a id="line.363">                break;</a>
+<span class="sourceLineNo">364</span><a id="line.364">            case QUIT:</a>
+<span class="sourceLineNo">365</span><a id="line.365">                if ( vCommand.hasSecondWord() )this.aGui.println( "Quit what?" );</a>
+<span class="sourceLineNo">366</span><a id="line.366">                else this.endGame();</a>
+<span class="sourceLineNo">367</span><a id="line.367">                break;</a>
+<span class="sourceLineNo">368</span><a id="line.368">            default:</a>
+<span class="sourceLineNo">369</span><a id="line.369">                this.aGui.println("Programmer error: command not recognised!");</a>
+<span class="sourceLineNo">370</span><a id="line.370">                break;</a>
+<span class="sourceLineNo">371</span><a id="line.371">        }</a>
+<span class="sourceLineNo">372</span><a id="line.372">    }</a>
+<span class="sourceLineNo">373</span><a id="line.373"></a>
+<span class="sourceLineNo">374</span><a id="line.374">    // implementations of user commands:</a>
+<span class="sourceLineNo">375</span><a id="line.375">    /**</a>
+<span class="sourceLineNo">376</span><a id="line.376">     * Tests a bunch of commands</a>
+<span class="sourceLineNo">377</span><a id="line.377">     * </a>
+<span class="sourceLineNo">378</span><a id="line.378">     * @param pCommand the document where the commands are</a>
+<span class="sourceLineNo">379</span><a id="line.379">     */</a>
+<span class="sourceLineNo">380</span><a id="line.380">    private void test(final Command pCommand)</a>
+<span class="sourceLineNo">381</span><a id="line.381">    {</a>
+<span class="sourceLineNo">382</span><a id="line.382">        this.aTestMode = true;</a>
+<span class="sourceLineNo">383</span><a id="line.383">        if ( !pCommand.hasSecondWord() ) {</a>
+<span class="sourceLineNo">384</span><a id="line.384">            // if there is no second word, we don't know where to go...</a>
+<span class="sourceLineNo">385</span><a id="line.385">            this.aGui.println( "Test what? ( indicate the document's name )" );</a>
+<span class="sourceLineNo">386</span><a id="line.386">            return;</a>
+<span class="sourceLineNo">387</span><a id="line.387">        }</a>
+<span class="sourceLineNo">388</span><a id="line.388">        Scanner vDoc; </a>
+<span class="sourceLineNo">389</span><a id="line.389">        try{</a>
+<span class="sourceLineNo">390</span><a id="line.390">            vDoc = new Scanner( new BufferedReader( new FileReader( "Test\\"+ pCommand.getSecondWord() +".txt" ) ) );</a>
+<span class="sourceLineNo">391</span><a id="line.391">            while(vDoc.hasNextLine()){</a>
+<span class="sourceLineNo">392</span><a id="line.392">                String vLigne = vDoc.nextLine();</a>
+<span class="sourceLineNo">393</span><a id="line.393">                interpretCommand(vLigne);</a>
+<span class="sourceLineNo">394</span><a id="line.394">            }</a>
+<span class="sourceLineNo">395</span><a id="line.395">            vDoc.close();</a>
+<span class="sourceLineNo">396</span><a id="line.396">        } </a>
+<span class="sourceLineNo">397</span><a id="line.397">        catch( FileNotFoundException Error ){</a>
+<span class="sourceLineNo">398</span><a id="line.398">            this.aGui.println("This document is not found");</a>
+<span class="sourceLineNo">399</span><a id="line.399">        }</a>
+<span class="sourceLineNo">400</span><a id="line.400">    }</a>
+<span class="sourceLineNo">401</span><a id="line.401">    </a>
+<span class="sourceLineNo">402</span><a id="line.402">    /**</a>
+<span class="sourceLineNo">403</span><a id="line.403">     * Saves a room for testing without being worried by the Transporter Room</a>
+<span class="sourceLineNo">404</span><a id="line.404">     * </a>
+<span class="sourceLineNo">405</span><a id="line.405">     * @param pCommand The command entered by the user.</a>
+<span class="sourceLineNo">406</span><a id="line.406">     */</a>
+<span class="sourceLineNo">407</span><a id="line.407">    private void alea(final Command pCommand)</a>
+<span class="sourceLineNo">408</span><a id="line.408">    {</a>
+<span class="sourceLineNo">409</span><a id="line.409">        if(this.aTestMode == false) return;</a>
+<span class="sourceLineNo">410</span><a id="line.410">        if(!pCommand.hasSecondWord()){</a>
+<span class="sourceLineNo">411</span><a id="line.411">            this.aGui.println( "Error: please indicate an index of room." );</a>
+<span class="sourceLineNo">412</span><a id="line.412">            return;</a>
+<span class="sourceLineNo">413</span><a id="line.413">        }else{</a>
+<span class="sourceLineNo">414</span><a id="line.414">            String vIndexS = pCommand.getSecondWord();</a>
+<span class="sourceLineNo">415</span><a id="line.415">            int vIndex = Integer.parseInt(vIndexS);</a>
+<span class="sourceLineNo">416</span><a id="line.416">            this.aGui.println("s:"+vIndexS+" i:"+vIndex);</a>
+<span class="sourceLineNo">417</span><a id="line.417">            for(Room vRoom : this.aRooms){</a>
+<span class="sourceLineNo">418</span><a id="line.418">                if(vRoom instanceof TransporterRoom){</a>
+<span class="sourceLineNo">419</span><a id="line.419">                    TransporterRoom vTR = (TransporterRoom)vRoom;</a>
+<span class="sourceLineNo">420</span><a id="line.420">                    vTR.setAleaRoom( this.aRooms.get(vIndex) );</a>
+<span class="sourceLineNo">421</span><a id="line.421">                }</a>
+<span class="sourceLineNo">422</span><a id="line.422">            }</a>
+<span class="sourceLineNo">423</span><a id="line.423">        }</a>
+<span class="sourceLineNo">424</span><a id="line.424">    }</a>
+<span class="sourceLineNo">425</span><a id="line.425">    </a>
+<span class="sourceLineNo">426</span><a id="line.426">    /**</a>
+<span class="sourceLineNo">427</span><a id="line.427">     * Prints the result of the charge of a beamer</a>
+<span class="sourceLineNo">428</span><a id="line.428">     * </a>
+<span class="sourceLineNo">429</span><a id="line.429">     * @param pCommand The command entered by the user.</a>
+<span class="sourceLineNo">430</span><a id="line.430">     */</a>
+<span class="sourceLineNo">431</span><a id="line.431">    private void charge(final Command pCommand)</a>
+<span class="sourceLineNo">432</span><a id="line.432">    {</a>
+<span class="sourceLineNo">433</span><a id="line.433">        this.aGui.println( this.aPlayer.charge(pCommand) );</a>
+<span class="sourceLineNo">434</span><a id="line.434">    }</a>
+<span class="sourceLineNo">435</span><a id="line.435">     </a>
+<span class="sourceLineNo">436</span><a id="line.436">    /**</a>
+<span class="sourceLineNo">437</span><a id="line.437">     * Prints the result of the fire of a beamer</a>
+<span class="sourceLineNo">438</span><a id="line.438">     * </a>
+<span class="sourceLineNo">439</span><a id="line.439">     * @param pCommand The command entered by the user.</a>
+<span class="sourceLineNo">440</span><a id="line.440">     */</a>
+<span class="sourceLineNo">441</span><a id="line.441">        private void fire(final Command pCommand)</a>
+<span class="sourceLineNo">442</span><a id="line.442">    {</a>
+<span class="sourceLineNo">443</span><a id="line.443">        this.aGui.println( this.aPlayer.fire(pCommand) );</a>
+<span class="sourceLineNo">444</span><a id="line.444">        this.printLocaInfo();</a>
+<span class="sourceLineNo">445</span><a id="line.445">    }</a>
+<span class="sourceLineNo">446</span><a id="line.446">    </a>
+<span class="sourceLineNo">447</span><a id="line.447">    /**</a>
+<span class="sourceLineNo">448</span><a id="line.448">     * prints the inventory of the player</a>
+<span class="sourceLineNo">449</span><a id="line.449">     */</a>
+<span class="sourceLineNo">450</span><a id="line.450">    private void inventory()</a>
+<span class="sourceLineNo">451</span><a id="line.451">    {</a>
+<span class="sourceLineNo">452</span><a id="line.452">         this.aGui.println(this.aPlayer.inventoryString());</a>
+<span class="sourceLineNo">453</span><a id="line.453">    }</a>
+<span class="sourceLineNo">454</span><a id="line.454">    </a>
+<span class="sourceLineNo">455</span><a id="line.455">    /**</a>
+<span class="sourceLineNo">456</span><a id="line.456">     * prints the action of taking an Item</a>
+<span class="sourceLineNo">457</span><a id="line.457">     * </a>
+<span class="sourceLineNo">458</span><a id="line.458">     * @param pCommand the command of the user</a>
+<span class="sourceLineNo">459</span><a id="line.459">     */</a>
+<span class="sourceLineNo">460</span><a id="line.460">    private void take(final Command pCommand)</a>
+<span class="sourceLineNo">461</span><a id="line.461">    {</a>
+<span class="sourceLineNo">462</span><a id="line.462">        this.aGui.println(this.aPlayer.take(pCommand));</a>
+<span class="sourceLineNo">463</span><a id="line.463">    }</a>
+<span class="sourceLineNo">464</span><a id="line.464">    </a>
+<span class="sourceLineNo">465</span><a id="line.465">    /**</a>
+<span class="sourceLineNo">466</span><a id="line.466">     * prints the droping an Item</a>
+<span class="sourceLineNo">467</span><a id="line.467">     * </a>
+<span class="sourceLineNo">468</span><a id="line.468">     * @param pCommand the command of the user</a>
+<span class="sourceLineNo">469</span><a id="line.469">     */</a>
+<span class="sourceLineNo">470</span><a id="line.470">    private void drop(final Command pCommand)</a>
+<span class="sourceLineNo">471</span><a id="line.471">    {</a>
+<span class="sourceLineNo">472</span><a id="line.472">         this.aGui.println(this.aPlayer.drop(pCommand));</a>
+<span class="sourceLineNo">473</span><a id="line.473">    }</a>
+<span class="sourceLineNo">474</span><a id="line.474">    </a>
+<span class="sourceLineNo">475</span><a id="line.475">    /**</a>
+<span class="sourceLineNo">476</span><a id="line.476">     * Prints the long description of the room.</a>
+<span class="sourceLineNo">477</span><a id="line.477">     * </a>
+<span class="sourceLineNo">478</span><a id="line.478">     * @param pCommand the command of the user</a>
+<span class="sourceLineNo">479</span><a id="line.479">     */</a>
+<span class="sourceLineNo">480</span><a id="line.480">    private void look(final Command pCommand)</a>
+<span class="sourceLineNo">481</span><a id="line.481">    {</a>
+<span class="sourceLineNo">482</span><a id="line.482">        if ( !pCommand.hasSecondWord() ) {</a>
+<span class="sourceLineNo">483</span><a id="line.483">            this.aGui.println( this.aPlayer.getCurrentRoom().getLongDescription() );</a>
+<span class="sourceLineNo">484</span><a id="line.484">            return;</a>
+<span class="sourceLineNo">485</span><a id="line.485">        } else {</a>
+<span class="sourceLineNo">486</span><a id="line.486">            String vItemName = pCommand.getSecondWord();</a>
+<span class="sourceLineNo">487</span><a id="line.487">            if(this.aPlayer.getCurrentRoom().getItemList().containsItem(vItemName) ){</a>
+<span class="sourceLineNo">488</span><a id="line.488">                this.aGui.println( this.aPlayer.getCurrentRoom().getItem(vItemName).getItemInfos() );</a>
+<span class="sourceLineNo">489</span><a id="line.489">            }else if(this.aPlayer.getInventory().containsItem(vItemName) ){</a>
+<span class="sourceLineNo">490</span><a id="line.490">                this.aGui.println( this.aPlayer.getInventory().getItem(vItemName).getItemInfos() );</a>
+<span class="sourceLineNo">491</span><a id="line.491">            }else{</a>
+<span class="sourceLineNo">492</span><a id="line.492">                this.aGui.println( "This Item is not disponible!" );</a>
+<span class="sourceLineNo">493</span><a id="line.493">            }</a>
+<span class="sourceLineNo">494</span><a id="line.494">        }</a>
+<span class="sourceLineNo">495</span><a id="line.495">    } // look()</a>
+<span class="sourceLineNo">496</span><a id="line.496">    </a>
+<span class="sourceLineNo">497</span><a id="line.497">    /**</a>
+<span class="sourceLineNo">498</span><a id="line.498">     * prints the action of eating</a>
+<span class="sourceLineNo">499</span><a id="line.499">     * </a>
+<span class="sourceLineNo">500</span><a id="line.500">     * @param pCommand the command of the user</a>
+<span class="sourceLineNo">501</span><a id="line.501">     */</a>
+<span class="sourceLineNo">502</span><a id="line.502">    private void eat(final Command pCommand)</a>
+<span class="sourceLineNo">503</span><a id="line.503">    {</a>
+<span class="sourceLineNo">504</span><a id="line.504">        this.aGui.println(this.aPlayer.eat(pCommand));</a>
+<span class="sourceLineNo">505</span><a id="line.505">    } // eat(.)</a>
+<span class="sourceLineNo">506</span><a id="line.506">    </a>
+<span class="sourceLineNo">507</span><a id="line.507">    /**</a>
+<span class="sourceLineNo">508</span><a id="line.508">     * prints the action of using an item.</a>
+<span class="sourceLineNo">509</span><a id="line.509">     * </a>
+<span class="sourceLineNo">510</span><a id="line.510">     * @param pCommand the command of the user.</a>
+<span class="sourceLineNo">511</span><a id="line.511">     */</a>
+<span class="sourceLineNo">512</span><a id="line.512">    private void use(final Command pCommand)</a>
+<span class="sourceLineNo">513</span><a id="line.513">    {</a>
+<span class="sourceLineNo">514</span><a id="line.514">        this.aGui.println(this.aPlayer.use(pCommand));</a>
+<span class="sourceLineNo">515</span><a id="line.515">        this.aGui.showImage( this.aPlayer.getCurrentRoom().getImageName() );</a>
+<span class="sourceLineNo">516</span><a id="line.516">        RepairableRoom vSalleDesMachines = (RepairableRoom)this.aRooms.get(2);</a>
+<span class="sourceLineNo">517</span><a id="line.517">        if(vSalleDesMachines.isRepaired()){</a>
+<span class="sourceLineNo">518</span><a id="line.518">            this.endGame();</a>
+<span class="sourceLineNo">519</span><a id="line.519">        }</a>
+<span class="sourceLineNo">520</span><a id="line.520">    }</a>
+<span class="sourceLineNo">521</span><a id="line.521"></a>
+<span class="sourceLineNo">522</span><a id="line.522">    /**</a>
+<span class="sourceLineNo">523</span><a id="line.523">     * Print out some help information.</a>
+<span class="sourceLineNo">524</span><a id="line.524">     * Here we print some stupid, cryptic message and a list of the </a>
+<span class="sourceLineNo">525</span><a id="line.525">     * command words.</a>
+<span class="sourceLineNo">526</span><a id="line.526">     */</a>
+<span class="sourceLineNo">527</span><a id="line.527">    private void printHelp() </a>
+<span class="sourceLineNo">528</span><a id="line.528">    {</a>
+<span class="sourceLineNo">529</span><a id="line.529">        this.aGui.println( "You are lost. You are alone. You wander" );</a>
+<span class="sourceLineNo">530</span><a id="line.530">        this.aGui.println( "around at Monash Uni, Peninsula Campus." + "\n" );</a>
+<span class="sourceLineNo">531</span><a id="line.531">        this.aGui.println( "Your command words are: " + this.aParser.getCommandString() );</a>
+<span class="sourceLineNo">532</span><a id="line.532">    }</a>
+<span class="sourceLineNo">533</span><a id="line.533"></a>
+<span class="sourceLineNo">534</span><a id="line.534">    /** </a>
+<span class="sourceLineNo">535</span><a id="line.535">     * Try to go to one direction. If there is an exit, enter the new</a>
+<span class="sourceLineNo">536</span><a id="line.536">     * room, otherwise print an error message.</a>
+<span class="sourceLineNo">537</span><a id="line.537">     * </a>
+<span class="sourceLineNo">538</span><a id="line.538">     * @param pCommand The command word representing the direction the player wants to go</a>
+<span class="sourceLineNo">539</span><a id="line.539">     */</a>
+<span class="sourceLineNo">540</span><a id="line.540">    private void goRoom( final Command pCommand ) </a>
+<span class="sourceLineNo">541</span><a id="line.541">    {</a>
+<span class="sourceLineNo">542</span><a id="line.542">        if ( ! pCommand.hasSecondWord() ) {</a>
+<span class="sourceLineNo">543</span><a id="line.543">            // if there is no second word, we don't know where to go...</a>
+<span class="sourceLineNo">544</span><a id="line.544">            this.aGui.println( "Go where?" );</a>
+<span class="sourceLineNo">545</span><a id="line.545">            return;</a>
+<span class="sourceLineNo">546</span><a id="line.546">        }</a>
+<span class="sourceLineNo">547</span><a id="line.547"></a>
+<span class="sourceLineNo">548</span><a id="line.548">        String vDirection = pCommand.getSecondWord();</a>
+<span class="sourceLineNo">549</span><a id="line.549"></a>
+<span class="sourceLineNo">550</span><a id="line.550">        // Try to leave current room.</a>
+<span class="sourceLineNo">551</span><a id="line.551">        Room vNextRoom;</a>
+<span class="sourceLineNo">552</span><a id="line.552">        if(this.aPlayer.getCurrentRoom() instanceof TransporterRoom){</a>
+<span class="sourceLineNo">553</span><a id="line.553">            TransporterRoom vCurrentRoom = (TransporterRoom)this.aPlayer.getCurrentRoom();</a>
+<span class="sourceLineNo">554</span><a id="line.554">            if(this.aTestMode == true){</a>
+<span class="sourceLineNo">555</span><a id="line.555">                vNextRoom = vCurrentRoom.getAleaRoom();</a>
+<span class="sourceLineNo">556</span><a id="line.556">            }else{</a>
+<span class="sourceLineNo">557</span><a id="line.557">                vNextRoom = vCurrentRoom.getExit( this.aRooms );</a>
+<span class="sourceLineNo">558</span><a id="line.558">            }</a>
+<span class="sourceLineNo">559</span><a id="line.559">        }else{</a>
+<span class="sourceLineNo">560</span><a id="line.560">            vNextRoom = this.aPlayer.getCurrentRoom().getExit( vDirection );</a>
+<span class="sourceLineNo">561</span><a id="line.561">            if(this.aPlayer.getCurrentRoom().getDoors().containsValue( this.aPlayer.getCurrentRoom().getDoor( vNextRoom ))){</a>
+<span class="sourceLineNo">562</span><a id="line.562">                String vKeyName = this.aPlayer.getCurrentRoom().getDoor(vNextRoom).getKey().getItemName();</a>
+<span class="sourceLineNo">563</span><a id="line.563">                if( this.aPlayer.getInventory().containsItem( vKeyName ) ){</a>
+<span class="sourceLineNo">564</span><a id="line.564">                    this.aPlayer.getCurrentRoom().getDoor(vNextRoom).openDoor( vKeyName );</a>
+<span class="sourceLineNo">565</span><a id="line.565">                    this.aGui.println( "This door is unlocked." );</a>
+<span class="sourceLineNo">566</span><a id="line.566">                } else {</a>
+<span class="sourceLineNo">567</span><a id="line.567">                    this.aPlayer.getCurrentRoom().getDoor(vNextRoom).openDoor( "a" );</a>
+<span class="sourceLineNo">568</span><a id="line.568">                }</a>
+<span class="sourceLineNo">569</span><a id="line.569">                if(this.aPlayer.getCurrentRoom().getDoor(vNextRoom).isLocked()){</a>
+<span class="sourceLineNo">570</span><a id="line.570">                    this.aGui.println( "This door is locked. Find the "+this.aPlayer.getCurrentRoom().getDoor(vNextRoom).getKey().getItemName() );</a>
+<span class="sourceLineNo">571</span><a id="line.571">                    return; </a>
+<span class="sourceLineNo">572</span><a id="line.572">                }</a>
+<span class="sourceLineNo">573</span><a id="line.573">            }</a>
+<span class="sourceLineNo">574</span><a id="line.574">        }</a>
+<span class="sourceLineNo">575</span><a id="line.575">        if ( vNextRoom == null )</a>
+<span class="sourceLineNo">576</span><a id="line.576">            this.aGui.println( "There is no door!" );</a>
+<span class="sourceLineNo">577</span><a id="line.577">        else {</a>
+<span class="sourceLineNo">578</span><a id="line.578">            this.aPlayer.changeRoom(vNextRoom);</a>
+<span class="sourceLineNo">579</span><a id="line.579">            this.printLocaInfo();</a>
+<span class="sourceLineNo">580</span><a id="line.580">            if( this.aPlayer.getTimeLimit().getGameOver() ){</a>
+<span class="sourceLineNo">581</span><a id="line.581">                this.aGui.println("GAME OVER! You lost!");</a>
+<span class="sourceLineNo">582</span><a id="line.582">                this.endGame();</a>
+<span class="sourceLineNo">583</span><a id="line.583">            }</a>
+<span class="sourceLineNo">584</span><a id="line.584">        }</a>
+<span class="sourceLineNo">585</span><a id="line.585">    }</a>
+<span class="sourceLineNo">586</span><a id="line.586">    /*</a>
+<span class="sourceLineNo">587</span><a id="line.587">    public boolean canPlayerGoDoor(final Room pNextRoom){</a>
+<span class="sourceLineNo">588</span><a id="line.588">        if(this.aPlayer.getCurrentRoom().getDoors().containsValue( this.aPlayer.getCurrentRoom().getDoor( pNextRoom ))){</a>
+<span class="sourceLineNo">589</span><a id="line.589">            String vKeyName = this.aPlayer.getCurrentRoom().getDoor(pNextRoom).getKey().getItemName();</a>
+<span class="sourceLineNo">590</span><a id="line.590">            if( this.aPlayer.getInventory().containsItem( vKeyName ) ){</a>
+<span class="sourceLineNo">591</span><a id="line.591">                this.aPlayer.getCurrentRoom().getDoor(pNextRoom).openDoor( vKeyName );</a>
+<span class="sourceLineNo">592</span><a id="line.592">                this.aGui.println( "This door is unlocked." );</a>
+<span class="sourceLineNo">593</span><a id="line.593">                return true;</a>
+<span class="sourceLineNo">594</span><a id="line.594">            } else {</a>
+<span class="sourceLineNo">595</span><a id="line.595">                this.aPlayer.getCurrentRoom().getDoor(pNextRoom).openDoor( "a" );</a>
+<span class="sourceLineNo">596</span><a id="line.596">            }</a>
+<span class="sourceLineNo">597</span><a id="line.597">            if(this.aPlayer.getCurrentRoom().getDoor(pNextRoom).isLocked()){</a>
+<span class="sourceLineNo">598</span><a id="line.598">                this.aGui.println( "This door is locked. Find the "+this.aPlayer.getCurrentRoom().getDoor(pNextRoom).getKey().getItemName() );</a>
+<span class="sourceLineNo">599</span><a id="line.599">                return false; </a>
+<span class="sourceLineNo">600</span><a id="line.600">            }</a>
+<span class="sourceLineNo">601</span><a id="line.601">        }</a>
+<span class="sourceLineNo">602</span><a id="line.602">        return false;</a>
+<span class="sourceLineNo">603</span><a id="line.603">    }</a>
+<span class="sourceLineNo">604</span><a id="line.604">    */</a>
+<span class="sourceLineNo">605</span><a id="line.605">    /**</a>
+<span class="sourceLineNo">606</span><a id="line.606">     * Returns to the previous room.</a>
+<span class="sourceLineNo">607</span><a id="line.607">     */</a>
+<span class="sourceLineNo">608</span><a id="line.608">    private void back()</a>
+<span class="sourceLineNo">609</span><a id="line.609">    {</a>
+<span class="sourceLineNo">610</span><a id="line.610">        if(this.aPlayer.isThereAPreviousRoom()){</a>
+<span class="sourceLineNo">611</span><a id="line.611">            this.aGui.println("There is no previous room.");              </a>
+<span class="sourceLineNo">612</span><a id="line.612">        } else {</a>
+<span class="sourceLineNo">613</span><a id="line.613">            Room vNextRoom;</a>
+<span class="sourceLineNo">614</span><a id="line.614">            if(this.aPlayer.getCurrentRoom() instanceof TransporterRoom){</a>
+<span class="sourceLineNo">615</span><a id="line.615">                TransporterRoom vCurrentRoom = (TransporterRoom)this.aPlayer.getCurrentRoom();</a>
+<span class="sourceLineNo">616</span><a id="line.616">                if(this.aTestMode == true){</a>
+<span class="sourceLineNo">617</span><a id="line.617">                    vNextRoom = vCurrentRoom.getAleaRoom();</a>
+<span class="sourceLineNo">618</span><a id="line.618">                }else{</a>
+<span class="sourceLineNo">619</span><a id="line.619">                    vNextRoom = vCurrentRoom.getExit( this.aRooms );</a>
+<span class="sourceLineNo">620</span><a id="line.620">                }</a>
+<span class="sourceLineNo">621</span><a id="line.621">                this.aPlayer.changeRoom(vNextRoom);</a>
+<span class="sourceLineNo">622</span><a id="line.622">                this.printLocaInfo();  </a>
+<span class="sourceLineNo">623</span><a id="line.623">                return;</a>
+<span class="sourceLineNo">624</span><a id="line.624">            }</a>
+<span class="sourceLineNo">625</span><a id="line.625">            this.aPlayer.backToThePreviousRoom();</a>
+<span class="sourceLineNo">626</span><a id="line.626">            this.printLocaInfo();  </a>
+<span class="sourceLineNo">627</span><a id="line.627">        }</a>
+<span class="sourceLineNo">628</span><a id="line.628">    } // back()</a>
+<span class="sourceLineNo">629</span><a id="line.629">    </a>
+<span class="sourceLineNo">630</span><a id="line.630">    /**</a>
+<span class="sourceLineNo">631</span><a id="line.631">     * Prints out the description of the room and it's image.</a>
+<span class="sourceLineNo">632</span><a id="line.632">     */</a>
+<span class="sourceLineNo">633</span><a id="line.633">    private void printLocaInfo()</a>
+<span class="sourceLineNo">634</span><a id="line.634">    {</a>
+<span class="sourceLineNo">635</span><a id="line.635">        this.aGui.println( this.aPlayer.getCurrentRoom().getLongDescription() );</a>
+<span class="sourceLineNo">636</span><a id="line.636">        if ( this.aPlayer.getCurrentRoom().getImageName() != null )</a>
+<span class="sourceLineNo">637</span><a id="line.637">            this.aGui.showImage( this.aPlayer.getCurrentRoom().getImageName() );</a>
+<span class="sourceLineNo">638</span><a id="line.638">    }</a>
+<span class="sourceLineNo">639</span><a id="line.639">    </a>
+<span class="sourceLineNo">640</span><a id="line.640">    /**</a>
+<span class="sourceLineNo">641</span><a id="line.641">     * Ends the game and prints out the ending message.</a>
+<span class="sourceLineNo">642</span><a id="line.642">     */</a>
+<span class="sourceLineNo">643</span><a id="line.643">    private void endGame()</a>
+<span class="sourceLineNo">644</span><a id="line.644">    {</a>
+<span class="sourceLineNo">645</span><a id="line.645">        this.aGui.println( "Thank you for playing.  Good bye." );</a>
+<span class="sourceLineNo">646</span><a id="line.646">        this.aGui.enable( false );</a>
+<span class="sourceLineNo">647</span><a id="line.647">    }</a>
+<span class="sourceLineNo">648</span><a id="line.648"></a>
+<span class="sourceLineNo">649</span><a id="line.649">}</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</div>
+</main>
+</body>
+</html>

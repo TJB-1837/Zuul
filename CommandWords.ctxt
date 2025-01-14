@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=CommandWords
+comment0.text=\r\n\ CommandWords\ class\ -\ words\ that\ are\ recognised\ by\ the\ game\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=
+comment1.target=CommandWords()
+comment1.text=\r\n\ Constructs\ the\ HashMap\ of\ valid\ command\ words\ associated\ with\ their\ string\r\n
+comment2.params=pCom
+comment2.target=boolean\ isCommand(java.lang.String)
+comment2.text=\r\n\ Checks\ if\ a\ given\ string\ is\ a\ valid\ command.\r\n\r\n\ @param\ pCom\ The\ command\ to\ be\ checked\ for\ validity.\r\n\ @return\ True\ if\ the\ command\ is\ valid,\ false\ otherwise.\r\n
+comment3.params=
+comment3.target=java.lang.String\ getCommandList()
+comment3.text=\r\n\ Put\ in\ a\ String\ all\ available\ command\ words\r\n\r\n\ @return\ all\ valid\ commands\r\n
+comment4.params=commandWord
+comment4.target=CommandWord\ getCommandWord(java.lang.String)
+comment4.text=\r\n\ Find\ the\ CommandWord\ associated\ with\ a\ command\ word.\r\n\ \r\n\ @param\ commandWord\ The\ word\ to\ look\ up.\r\n\ @return\ The\ CommandWord\ correspondng\ to\ commandWord,\ or\ UNKNOWN\r\n\ \ \ \ \ \ \ \ \ if\ it\ is\ not\ a\ valid\ command\ word.\r\n
+numComments=5

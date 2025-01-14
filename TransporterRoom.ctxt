@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.target=TransporterRoom
+comment0.text=\r\n\ TransporterRoom\ Class\ -\ a\ room\ that\ transports\ the\ player\ into\ a\ random\ room\ of\ the\ map\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pName\ pDes\ pImageName
+comment1.target=TransporterRoom(java.lang.String,\ java.lang.String,\ java.lang.String)
+comment1.text=\r\n\ Constructs\ a\ TransporterRoom\ object\r\n\ \r\n\ @param\ pName\ name\ of\ the\ room\r\n\ @param\ pDes\ \ description\ of\ the\ room\r\n\ @param\ pImageName\ name\ of\ the\ image\ /\ path\r\n
+comment2.params=pRooms
+comment2.target=Room\ getExit(java.util.ArrayList)
+comment2.text=\r\n\ Puts\ the\ exit\ of\ the\ transporter\ room\ to\ a\ random\ room\r\n\ \r\n\ @param\ pRooms\ the\ list\ of\ rooms\ created\r\n\ @return\ the\ room\ which\ is\ exit\ of\ the\ transporter\ room\r\n
+comment3.params=pRoom
+comment3.target=void\ setAleaRoom(Room)
+comment3.text=\r\n\ Sets\ the\ alea\ room\ for\ the\ alea\ command\r\n\ \r\n\ @param\ pRoom\ the\ alea\ room\r\n
+comment4.params=
+comment4.target=Room\ getAleaRoom()
+comment4.text=\r\n\ Gets\ the\ alea\ room\ for\ the\ alea\ command\r\n\ \r\n\ @return\ pRoom\ the\ alea\ room\r\n
+numComments=5

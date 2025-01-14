@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Command
+comment0.text=\r\n\ Classe\ Command\ -\ une\ commande\ du\ jeu\ d'aventure\ Zuul.\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pCommandWord\ pSecondWord
+comment1.target=Command(CommandWord,\ java.lang.String)
+comment1.text=\r\n\ Constructs\ a\ Command\ object\ with\ a\ specified\ command\ word\ and\ second\ word.\r\n\r\n\ @param\ pCommandWord\ The\ main\ command\ word.\r\n\ @param\ pSecondWord\ \ The\ second\ word\ associated\ with\ the\ command.\r\n
+comment2.params=
+comment2.target=CommandWord\ getCommandWord()
+comment2.text=\r\n\ Gets\ the\ command\ word\ of\ the\ command.\r\n\r\n\ @return\ The\ command\ word.\r\n
+comment3.params=
+comment3.target=java.lang.String\ getSecondWord()
+comment3.text=\r\n\ Gets\ the\ second\ word\ of\ the\ command.\r\n\r\n\ @return\ The\ second\ word,\ or\ null\ if\ none\ exists.\r\n
+comment4.params=
+comment4.target=boolean\ hasSecondWord()
+comment4.text=\r\n\ Checks\ if\ the\ command\ has\ a\ second\ word.\r\n\r\n\ @return\ True\ if\ a\ second\ word\ is\ present,\ false\ otherwise.\r\n
+comment5.params=
+comment5.target=boolean\ isUnknown()
+comment5.text=\r\n\ Checks\ if\ the\ command\ is\ unknown.\r\n\r\n\ @return\ True\ if\ the\ command\ word\ is\ null,\ indicating\ an\ unknown\ command.\r\n
+numComments=6

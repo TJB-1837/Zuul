@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=Door
+comment0.text=\r\n\ Door\ -\ A\ class\ that\ can\ block\ acces\ to\ certains\ exits\ of\ a\ room\ if\ you\ have\ not\ the\ right\ keyItem\ to\ open\ it\ \r\n\r\n\ @author\ (votre\ nom)\r\n\ @version\ (un\ num\u00E9ro\ de\ version\ ou\ une\ date)\r\n
+comment1.params=pRoom\ pKey
+comment1.target=Door(Room,\ Item)
+comment1.text=\r\n\ Constructs\ the\ door\ object\ \r\n\ \r\n\ @param\ pRoom\ the\ room\ the\ door\ gives\ you\ access\r\n\ @param\ pKey\ the\ item\ that\ can\ unlock\ this\ door\r\n
+comment2.params=
+comment2.target=Item\ getKey()
+comment2.text=\r\n\ Gets\ the\ key\ item\ that\ can\ unlock\ this\ door\r\n\ \r\n\ @return\ the\ key\ item\r\n
+comment3.params=
+comment3.target=Room\ getNextRoom()
+comment3.text=\r\n\ Gets\ the\ room\ that\ this\ door\ gives\ you\ access\ to\r\n\ \r\n\ @return\ the\ door\r\n
+comment4.params=
+comment4.target=boolean\ isLocked()
+comment4.text=\r\n\ Gets\ if\ the\ door\ is\ lock\ or\ not\r\n\ \r\n\ @return\ true\ if\ the\ door\ is\ locked\r\n
+comment5.params=pIsLocked
+comment5.target=void\ setLock(boolean)
+comment5.text=\r\n\ Sets\ the\ lock\ of\ the\ door\ \r\n\ \r\n\ @param\ pIsLocked\ the\ new\ lock\ status\ of\ the\ door\r\n
+comment6.params=pItemName
+comment6.target=void\ openDoor(java.lang.String)
+comment6.text=\r\n\ Open\ the\ door\ if\ the\ key\ item\ name\ in\ parameter\ is\ equals\ to\ the\ key\ item\ name\ of\ the\ door\r\n\ \r\n\ @param\ pItemName\ the\ key\ item\ name\ \r\n
+numComments=7

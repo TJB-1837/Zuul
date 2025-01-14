@@ -1,0 +1,50 @@
+go south
+take FlashLight
+go down
+go west
+go up
+go east
+take MagicCookie
+eat MagicCookie
+back
+back
+back
+back
+go west
+take GoldBar
+back
+go down
+go east
+go up
+go up
+take Beamer
+inventory
+help
+look
+look Beamer
+go down
+go down
+go south
+look
+look Poison
+take Poison
+eat Poison
+go north
+go east
+go up
+go south
+take Antidote
+eat Antidote
+back
+inventory
+charge Beamer
+go down
+go east
+go south
+fire Beamer
+inventory
+drop Beamer
+drop GoldBar
+look
+inventory
+quit

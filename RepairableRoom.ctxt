@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=RepairableRoom
+comment0.text=\r\n\ RepairableRoom\ Class\ -\ a\ room\ that\ has\ 2\ stages\ (broken\ /\ repaired)\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pName\ pDes\ pImageName\ pRepairedRoomImagePath
+comment1.target=RepairableRoom(java.lang.String,\ java.lang.String,\ java.lang.String,\ java.lang.String)
+comment1.text=\r\n\ Constructs\ a\ RepairableRoom\ object\r\n\ \r\n\ @param\ pName\ name\ of\ the\ room\r\n\ @param\ pDes\ description\ of\ the\ room\r\n\ @param\ pImageName\ path\ of\ the\ first\ image\r\n\ @param\ pRepairedRoomImagePath\ path\ of\ the\ second\ image\r\n
+comment2.params=pRepaired
+comment2.target=void\ setRepaired(boolean)
+comment2.text=\r\n\ Sets\ the\ repaired\ status\ (true\ or\ false)\r\n\ \r\n\ @param\ pRepaired\ if\ the\ room\ is\ repaired\ or\ not\r\n
+comment3.params=
+comment3.target=void\ changeImageName()
+comment3.text=\r\n\ Swaps\ the\ fist\ image\ to\ the\ second\ \r\n
+comment4.params=
+comment4.target=boolean\ isRepaired()
+comment4.text=\r\n\ Checks\ if\ the\ room\ is\ repaired\r\n\ \r\n\ @return\ If\ the\ room\ is\ repaired\r\n
+comment5.params=
+comment5.target=int\ getRepairPercent()
+comment5.text=\r\n\ Gets\ The\ percent\ of\ repairation\ of\ the\ room\r\n\ \r\n\ @return\ The\ percent\ of\ repairation\ of\ the\ room\r\n
+comment6.params=pRepairPercent
+comment6.target=void\ setRepairPercent(int)
+comment6.text=\r\n\ Sets\ the\ repair\ percentage\ of\ the\ room\r\n\ \r\n\ @param\ pRepairPercent\ the\ percent\ of\ repairation\ of\ the\ room\r\n
+numComments=7

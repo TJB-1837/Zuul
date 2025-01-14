@@ -1,0 +1,19 @@
+#BlueJ class context
+comment0.target=Beamer
+comment0.text=\r\n\ Beamer\ -\ it's\ a\ special\ item\ that\ teleport\ the\ player\ into\ the\ room\ where\ he\ charged\ the\ beamer\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pItemName
+comment1.target=Beamer(java.lang.String)
+comment1.text=\r\n\ Constructs\ a\ beamer\r\n\ \r\n\ @param\ pItemName\ Name\ of\ the\ Beamer\ item\r\n
+comment2.params=
+comment2.target=Room\ getSavedRoom()
+comment2.text=\r\n\ Gets\ the\ saved\ room\r\n\ \r\n\ @return\ the\ saved\ room\r\n
+comment3.params=pSavedRoom
+comment3.target=void\ chargeBeamer(Room)
+comment3.text=\r\n\ Saves\ the\ room\ in\ the\ beamer\r\n\ \r\n\ @param\ pSavedRoom\ the\ room\ you\ wanna\ save\r\n
+comment4.params=
+comment4.target=boolean\ isCharged()
+comment4.text=\r\n\ Verifies\ if\ the\ beamer\ is\ charged\r\n\ \r\n\ @return\ A\ boolean\ that\ return\ true\ if\ there\ is\ a\ saved\ room\r\n
+comment5.params=
+comment5.target=void\ resetBeamer()
+comment5.text=\r\n\ Resets\ the\ beamer\ \r\n
+numComments=6

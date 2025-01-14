@@ -1,0 +1,44 @@
+alea 2
+go south
+go west
+go up
+go east
+go east
+go south
+back
+go up
+go west
+back
+go up
+go east
+back
+back
+go north
+go west
+back
+go north
+back
+go up
+back
+go east
+go east
+go up
+back
+go down
+back
+go east
+back
+go south
+back
+go north
+go down
+go east
+go south
+go up
+go west
+go south
+go west
+back
+go north
+go north
+go south

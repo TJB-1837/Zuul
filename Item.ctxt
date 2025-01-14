@@ -1,0 +1,22 @@
+#BlueJ class context
+comment0.target=Item
+comment0.text=\r\n\ Represents\ an\ item\ in\ the\ game.\ \r\n\ This\ class\ encapsulates\ the\ properties\ of\ an\ item,\ including\ its\ name,\ description,\ and\ price.\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 7\ /\ 17/03/2024\r\n
+comment1.params=pItemName\ pDes\ pPrice\ pWeight
+comment1.target=Item(java.lang.String,\ java.lang.String,\ int,\ double)
+comment1.text=\r\n\ Constructs\ an\ Item\ object\ with\ the\ specified\ name,\ description,\ and\ price.\r\n\ \r\n\ @param\ pItemName\ The\ name\ of\ the\ item.\r\n\ @param\ pDes\ The\ description\ of\ the\ item.\r\n\ @param\ pPrice\ The\ price\ of\ the\ item.\ \r\n\ @param\ pWeight\ The\ weight\ of\ the\ item.\r\n
+comment2.params=
+comment2.target=java.lang.String\ getItemName()
+comment2.text=\r\n\ Gets\ the\ name\ of\ the\ item.\r\n\ \r\n\ @return\ The\ name\ of\ the\ item.\r\n
+comment3.params=
+comment3.target=java.lang.String\ getItemDescription()
+comment3.text=\r\n\ Gets\ the\ description\ of\ the\ item.\r\n\ \r\n\ @return\ The\ description\ of\ the\ item.\r\n
+comment4.params=
+comment4.target=int\ getItemPrice()
+comment4.text=\r\n\ Gets\ the\ price\ of\ the\ item.\r\n\ \r\n\ @return\ The\ price\ of\ the\ item.\r\n
+comment5.params=
+comment5.target=double\ getItemWeight()
+comment5.text=\r\n\ Gets\ the\ weight\ of\ the\ item.\r\n\ \r\n\ @return\ The\ weight\ of\ the\ item.\r\n
+comment6.params=
+comment6.target=java.lang.String\ getItemInfos()
+comment6.text=\r\n\ gets\ all\ the\ infos\ about\ an\ item\r\n\ \r\n\ @return\ the\ string\ containing\ all\ these\ infos.\r\n
+numComments=7

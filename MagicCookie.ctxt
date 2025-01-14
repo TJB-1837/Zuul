@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.target=MagicCookie
+comment0.text=\r\n\ MagicCookie\ Class\ -\ Special\ item,\ when\ eated,\ confers\ the\ ability\ to\ carry\ twice\ more\ than\ default\ (double\ maxWeight\ of\ the\ player).\r\n\r\n\ @author\ Antoine\ MARMOL\r\n\ @version\ 11\ /\ 21/05/2024\r\n
+comment1.params=pItemName\ pEffect
+comment1.target=MagicCookie(java.lang.String,\ int)
+comment1.text=\r\n\ Constructs\ a\ MagicCookie\ item\r\n\ \r\n\ @param\ pItemName\ Name\ of\ the\ MagicCookie\r\n\ @param\ pEffect\ Effect\ of\ the\ MagicCookie\ (max\ weight\ multiplier)\r\n
+comment2.params=pPlayer
+comment2.target=void\ applyEffect(Player)
+comment2.text=\r\n\ Apply\ the\ effect\ of\ the\ player\r\n\ \r\n\ @param\ pPlayer\ The\ player\ you're\ applying\ the\ effect\r\n
+numComments=3
